@@ -1,44 +1,71 @@
 <template>
-  <el-container class="mt-10">
-    <!-- Products -->
-    <el-row class="cards-container" align="middle" justify="space-between">
-      <ProductCard
-        v-for="(item, index) in productStore.getProducts"
-        :key="index"
-        :product="item"
-        @add-to-cart="onAddToCart"
-      />
+  <el-container>
+    <!-- Navbar -->
+    <el-row style="width: 100%">
+      <el-header class="w-full h-[40px] bg-emerald-500 text-white flex items-center">
+        <el-row style="width: 100%" align="middle" justify="space-between">
+          <el-col :span="2" style="display: flex; align-items: center; gap: 5px">
+            <el-icon :size="20"><Phone /></el-icon>
+            <el-text style="font-size: 12px">+639123456789</el-text>
+          </el-col>
+          <el-col
+            :span="20"
+            style="display: flex; align-items: center; justify-content: center; gap: 5px"
+          >
+            <el-text>Get 50% off on an selected item | Shop now</el-text>
+          </el-col>
+          <el-col
+            :span="2"
+            style="display: flex; align-items: center; justify-content: end; gap: 1.5em"
+          >
+            <el-dropdown placement="bottom-start">
+              <el-row style="gap: 5px; cursor: pointer">
+                <el-text class="text-white"> eng </el-text>
+                <el-icon :size="15" color="white"><ArrowDown /></el-icon>
+              </el-row>
+              <template #dropdown>
+                <el-dropdown-menu>
+                  <el-dropdown-item>The Action 1st</el-dropdown-item>
+                  <el-dropdown-item>The Action 2st</el-dropdown-item>
+                  <el-dropdown-item>The Action 3st</el-dropdown-item>
+                </el-dropdown-menu>
+              </template>
+            </el-dropdown>
+            <el-dropdown placement="bottom-start">
+              <el-row style="gap: 5px; cursor: pointer">
+                <el-text> Location </el-text>
+                <el-icon :size="15" color="white"><ArrowDown /></el-icon>
+              </el-row>
+
+              <template #dropdown>
+                <el-dropdown-menu>
+                  <el-dropdown-item>The Action 1st</el-dropdown-item>
+                  <el-dropdown-item>The Action 2st</el-dropdown-item>
+                  <el-dropdown-item>The Action 3st</el-dropdown-item>
+                </el-dropdown-menu>
+              </template>
+            </el-dropdown>
+          </el-col>
+        </el-row>
+      </el-header>
     </el-row>
 
-    <!-- Cart Drawer as child component -->
-    <CartDrawer
-      :visible="cartStore.drawerVisible"
-      :items="cartStore.items"
-      @close="cartStore.toggleDrawer(false)"
-      @remove="cartStore.removeFromCart"
-    />
+    <!-- Filters -->
+    <FilterView />
 
-    <!-- Footer -->
-    <el-footer>
-      <el-text>FOOTER</el-text>
-    </el-footer>
+    <!-- Products -->
+    <el-row class="cards-container" align="middle" justify="space-between">
+      <ProductCard v-for="(item, index) in productStore.getProducts" :key="index" :product="item" />
+    </el-row>
   </el-container>
 </template>
 
 <script setup lang="ts">
 import { getProducts } from '@/api/actios/product.action'
-import type { ProductTypes } from '@/models/types'
-import { useCartStore } from '@/stores/cartStore'
 import { useProductStore } from '@/stores/productStore'
 import { onMounted } from 'vue'
 
 const productStore = useProductStore()
-const cartStore = useCartStore()
-
-function onAddToCart(product: ProductTypes) {
-  cartStore.addToCart(product)
-  // cartStore.toggleDrawer(true)
-}
 
 onMounted(async () => {
   await getProducts()
@@ -52,15 +79,6 @@ onMounted(async () => {
   display: flex;
   flex-direction: column;
   align-items: center;
-}
-
-.logInSignUpCon {
-  display: flex;
-  float: right;
-  height: 60px;
-  width: 10%;
-  border-radius: 100px;
-  background-color: #dfdfdf;
 }
 
 .cards-container {

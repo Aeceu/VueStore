@@ -80,18 +80,6 @@
 
     <el-row>
       <el-col :span="12">
-        <el-button
-          circle
-          size="large"
-          style="margin-left: 1em"
-          @click="cartStore.toggleDrawer(true)"
-        >
-          <el-badge :value="cartStore.items.length" class="item">
-            <el-icon><ShoppingCart /></el-icon>
-          </el-badge>
-        </el-button>
-      </el-col>
-      <el-col :span="12">
         <el-dropdown trigger="click" placement="bottom-start">
           <el-button round class="poppins-semibold card-button" size="large">
             <el-text class="poppins-bold"> Sort by </el-text>
@@ -126,10 +114,6 @@ import {
   sortProductsByPrice,
   sortProductsByRatings,
 } from '@/api/actios/product.action'
-
-// Import your cart store and initialize it
-import { useCartStore } from '@/stores/cartStore'
-const cartStore = useCartStore()
 </script>
 
 <style scoped>
