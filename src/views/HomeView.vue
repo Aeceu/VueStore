@@ -53,34 +53,74 @@
     <!-- Filters -->
     <FilterView />
 
-    <!-- Products -->
+    <el-row style="width: 75%">
+      <el-button type="primary" size="large" class="my-4" @click="openDrawer()"
+        >Add New Product</el-button
+      >
+    </el-row>
+
     <el-row
       class="cards-container"
       align="middle"
       justify="space-between"
       v-loading="productStore.getLoading"
     >
-      <ProductCard v-for="(item, index) in productStore.getProducts" :key="index" :product="item" />
+      <el-col
+        v-for="(item, index) in productStore.getProducts"
+        :key="index"
+        :span="24"
+        class="card-container"
+      >
+        <ProductCard :product="item" />
+        <div class="flex justify-end p-2 gap-2">
+          <el-button size="small" type="primary" @click="openDrawer(item)">Edit</el-button>
+          <el-button size="small" type="danger" @click="removeProduct(item.id)">Delete</el-button>
+        </div>
+      </el-col>
     </el-row>
+
     <div
       v-if="productStore.getProducts.length === 0"
       class="w-full flex items-center justify-center"
     >
-      <el-empty description="empty" />
+      <el-empty description="No products found" />
     </div>
+
+    <ProductDrawer
+      v-model:visible="drawerVisible"
+      :product="selectedProduct"
+      @save="saveOrUpdateProduct"
+    />
   </el-container>
 </template>
 
 <script setup lang="ts">
-import { getProducts } from '@/api/actios/product.action'
+import { getProducts, deleteProduct, saveProduct } from '@/api/actios/product.action'
 import { useProductStore } from '@/stores/productStore'
-import { onMounted } from 'vue'
+import { ref, onMounted } from 'vue'
+import ProductDrawer from '@/components/ProductDrawer.vue'
+import type { ProductTypes } from '@/models/types'
 
 const productStore = useProductStore()
+const drawerVisible = ref(false)
+const selectedProduct = ref<ProductTypes | null>(null)
 
 onMounted(async () => {
   await getProducts()
 })
+
+const openDrawer = (product: ProductTypes | null = null) => {
+  selectedProduct.value = product
+  drawerVisible.value = true
+}
+
+const saveOrUpdateProduct = async (product: ProductTypes) => {
+  await saveProduct(product)
+}
+
+const removeProduct = async (id: number) => {
+  await deleteProduct(id)
+}
 </script>
 
 <style scoped>

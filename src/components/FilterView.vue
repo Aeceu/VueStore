@@ -146,7 +146,7 @@ const handleClear = () => {
 <style scoped>
 .filter-container {
   width: 75%;
-  padding: 2em 0em;
+  padding-top: 2em;
 }
 
 .card-button {

@@ -1,6 +1,7 @@
 import { useProductStore } from '@/stores/productStore'
 import axios from '@/api/axios'
 import { handleApiError } from '@/utils/errorHandler'
+import type { ProductTypes } from '@/models/types'
 
 export const getProducts = async () => {
   const productStore = useProductStore()
@@ -77,4 +78,53 @@ export const searchProductsByText = (searchTerm: string) => {
   })
 
   productStore.setProducts(filtered)
+}
+
+export const saveProduct = async (product: Partial<ProductTypes>) => {
+  const productStore = useProductStore()
+  try {
+    productStore.setLoading(true)
+
+    const defaultRating = { rate: 0, count: 0 }
+
+    if (product.id) {
+      const response = await axios.put(`/products/${product.id}`, product)
+      const updatedProduct = {
+        ...response.data,
+        rating: product.rating ?? defaultRating,
+      }
+
+      const updatedProducts = productStore.getProducts.map((item) =>
+        item.id === updatedProduct.id ? updatedProduct : item,
+      )
+
+      productStore.setProducts(updatedProducts)
+    } else {
+      const response = await axios.post('/products', product)
+      const newProduct = {
+        ...response.data,
+        rating: response.data.rating ?? defaultRating,
+      }
+
+      productStore.setProducts([...productStore.getProducts, newProduct])
+    }
+  } catch (error) {
+    productStore.setErrorMsg(handleApiError(error))
+  } finally {
+    productStore.setLoading(false)
+  }
+}
+
+export const deleteProduct = async (id: number) => {
+  const productStore = useProductStore()
+  try {
+    productStore.setLoading(true)
+    await axios.delete(`/products/${id}`)
+    const updatedProducts = productStore.getProducts.filter((item) => item.id !== id)
+    productStore.setProducts(updatedProducts)
+  } catch (error) {
+    productStore.setErrorMsg(handleApiError(error))
+  } finally {
+    productStore.setLoading(false)
+  }
 }

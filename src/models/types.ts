@@ -41,6 +41,4 @@ export type ProductTypes = {
   }
 }
 
-export type TableDataType = {
-  id: number
-}
+export type NewProductTypes = Omit<ProductTypes, 'id' | 'rating'>

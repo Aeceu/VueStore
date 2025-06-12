@@ -1,10 +1,5 @@
 <template>
   <el-col :span="24" align="center" justify="center" class="card-container">
-    <el-button class="heart-button">
-      <el-icon :size="20">
-        <Star />
-      </el-icon>
-    </el-button>
     <img :src="product.image" />
     <el-row style="width: 100%; padding: 1em; flex-direction: column" justify="start">
       <el-text class="clamp-1 poppins-semibold" style="width: 100%; text-align: start">{{
@@ -73,25 +68,5 @@ img {
   background: var(--color-green);
   color: white;
   cursor: pointer;
-}
-.heart-button {
-  border-radius: 50px;
-  padding: 0;
-  margin: 0;
-  height: 40px;
-  width: 40px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  position: absolute;
-  background: white;
-  right: 5%;
-  top: 3%;
-}
-
-.heart-button:hover {
-  border: 2px solid var(--color-green);
-  background-color: var(--color-green);
-  color: white;
 }
 </style>
