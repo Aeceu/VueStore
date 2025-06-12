@@ -71,11 +71,7 @@
         :span="24"
         class="card-container"
       >
-        <ProductCard :product="item" />
-        <div class="flex justify-end p-2 gap-2">
-          <el-button size="small" type="primary" @click="openDrawer(item)">Edit</el-button>
-          <el-button size="small" type="danger" @click="removeProduct(item.id)">Delete</el-button>
-        </div>
+        <ProductCard :product="item" @edit="openDrawer" @delete="removeProduct" />
       </el-col>
     </el-row>
 

@@ -18,6 +18,22 @@
         class="poppins-bold"
         >{{ `₱ ${product.price}` }}</el-text
       >
+      <el-row :gutter="24">
+        <el-col :span="24">
+          <el-button class="w-full" size="large" type="primary" @click="$emit('edit', product)"
+            >Edit</el-button
+          >
+        </el-col>
+        <el-col :span="24">
+          <el-button
+            class="w-full mt-2"
+            size="large"
+            type="danger"
+            @click="$emit('delete', product.id)"
+            >Delete</el-button
+          >
+        </el-col>
+      </el-row>
     </el-row>
   </el-col>
 </template>
@@ -26,10 +42,12 @@
 import type { ProductTypes } from '@/models/types'
 import { ref } from 'vue'
 
-type Props = {
-  product: ProductTypes
-}
-const props = defineProps<Props>()
+const props = defineProps<{ product: ProductTypes }>()
+defineEmits<{
+  (e: 'edit', product: ProductTypes): void
+  (e: 'delete', id: number): void
+}>()
+
 const rate = ref(Math.floor(props.product.rating.rate))
 </script>
 
