@@ -5,7 +5,7 @@
         >Filter by:</el-text
       >
       <el-dropdown trigger="click" placement="bottom">
-        <el-button round class="poppins-semibold card-button" size="large">
+        <el-button class="poppins-semibold card-button" size="large">
           <el-text class="poppins-bold"> Ratings </el-text>
           <el-icon style="margin-left: 5px">
             <ArrowDown />
@@ -47,7 +47,7 @@
         </template>
       </el-dropdown>
       <el-dropdown trigger="click" placement="bottom">
-        <el-button round class="poppins-semibold card-button" size="large">
+        <el-button class="poppins-semibold card-button" size="large">
           <el-text class="poppins-bold"> Category </el-text>
           <el-icon style="margin-left: 5px">
             <ArrowDown />
@@ -73,15 +73,26 @@
       <el-text
         class="poppins-semibold"
         style="font-size: 16px; cursor: pointer"
-        @click="getProducts()"
+        @click="handleClear()"
         >Clear</el-text
       >
     </el-row>
 
+    <el-input
+      class="shadow-lg"
+      v-model="searchText"
+      placeholder="Search products..."
+      clearable
+      prefix-icon="Search"
+      @input="searchProducts"
+      style="width: 500px"
+      size="large"
+    />
+
     <el-row>
       <el-col :span="12">
         <el-dropdown trigger="click" placement="bottom-start">
-          <el-button round class="poppins-semibold card-button" size="large">
+          <el-button class="poppins-semibold card-button" size="large">
             <el-text class="poppins-bold"> Sort by </el-text>
             <el-icon style="margin-left: 5px">
               <ArrowDown />
@@ -106,6 +117,7 @@
 </template>
 
 <script setup lang="ts">
+import { ref } from 'vue'
 import {
   filterProductsByCategory,
   filterProductsByRatings,
@@ -113,7 +125,22 @@ import {
   sortProductsByCategory,
   sortProductsByPrice,
   sortProductsByRatings,
+  searchProductsByText,
 } from '@/api/actios/product.action'
+
+const searchText = ref('')
+
+const searchProducts = () => {
+  if (searchText.value.trim() === '') {
+    getProducts()
+  } else {
+    searchProductsByText(searchText.value.trim())
+  }
+}
+const handleClear = () => {
+  getProducts()
+  searchText.value = ''
+}
 </script>
 
 <style scoped>

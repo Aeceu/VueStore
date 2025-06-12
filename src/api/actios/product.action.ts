@@ -65,3 +65,16 @@ export const filterProductsByCategory = (val: string) => {
   const result = products.filter((item) => item.category === val)
   productStore.setProducts(result)
 }
+
+export const searchProductsByText = (searchTerm: string) => {
+  const productStore = useProductStore()
+  const allProducts = productStore.products
+
+  const filtered = allProducts.filter((product) => {
+    const titleMatch = product.title.toLowerCase().includes(searchTerm.toLowerCase())
+    const categoryMatch = product.category.toLowerCase().includes(searchTerm.toLowerCase())
+    return titleMatch || categoryMatch
+  })
+
+  productStore.setProducts(filtered)
+}
